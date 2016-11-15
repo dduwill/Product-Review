@@ -4,7 +4,17 @@
 ###Yixi Wei
 ========================================================
 
+### Summary
+
 In this project, I run an LDA topic models analysis for Amazon's Customer Reviews, more specifically, the Automotive reviews (available from: http://jmcauley.ucsd.edu/data/amazon/). I used the R package [lda](http://cran.r-project.org/web/packages/lda/) and I visualize the output using [LDAvis](https://github.com/cpsievert/LDAvis).
+
+The R Source Code is Available at: https://github.com/dduwill/Product-Review/blob/master/Assignment%208.R
+
+The LDA topic models analysis for top 10 relavant topics is Available at: https://dduwill.github.io/Product-Review/vis
+
+According to my result, topic 3, 5, 6 have some overlaps, these customer reviews are more focused on detailed information of the vehicles, such as engines, oil filters, batteries, lights, etc. Topic 4, 8 have a great overlap, mostly focused on exterior apperance of the vehicles, like leathers, wax, cleanness, plaints. Topic 7 is very close to topic 4, 8, but more focused on minor exterior condition, for example, whether the vehicle is carefully washed or not. Topic 9, 2, 1 are interconnected with each other, these topics focused on overall usage experiences of the vehicles. Topic 10 is isolated from all the other topics, which only focused on windshield and wiper conditions. From the topics' sizes, we could conclude that three major factors affect the customer reviews - usage satifaction, exterior apperance and mechanical conditions. 
+
+
 
 ### The data
 
