@@ -6,31 +6,34 @@
 
 ### Summary
 
-In this project, I run an LDA topic models analysis for Amazon's Customer Reviews, more specifically, the Automotive reviews (available from: http://jmcauley.ucsd.edu/data/amazon/). I used the R package [lda](http://cran.r-project.org/web/packages/lda/) and I visualize the output using [LDAvis](https://github.com/cpsievert/LDAvis).
+In this project, I run an LDA topic models analysis for Amazon's Customer Reviews, more specifically, the Automotive reviews (available from: http://jmcauley.ucsd.edu/data/amazon/). I used the R package [lda](http://cran.r-project.org/web/packages/lda/) and I visualize the output using [LDAvis](https://github.com/cpsievert/LDAvis). Because my dataset is a json file, so I used the [rjson] (http://cran.r-project.org/web/packages/lda/) to process this dataset.
+
+All the relevant files are on Github repository: https://github.com/dduwill/Product-Review
 
 The R Source Code is Available at: https://github.com/dduwill/Product-Review/blob/master/Assignment%208.R
 
 The LDA topic models analysis for top 10 relavant topics is Available at: https://dduwill.github.io/Product-Review/vis
 
 ### Result Analysis
+Note that, all my analysis are using a relevance setting of $\lambda = 0.5$.
 
 According to my result, topic 3, 5, 6 have some overlaps, these customer reviews are more focused on detailed information of the vehicles, such as engines, oil filters, batteries, lights, etc.
 
-Topic 3 using a relevance setting of $\lambda = 0.5$ has the most relevant term: light bulbs, and also some other related terms, like leds, bright, information. 
+Topic 3  has the most relevant term: light bulbs, and also some other related terms, like leds, bright, information. 
 https://dduwill.github.io/Product-Review/vis/#topic=3&lambda=0.5&term=
 
-Topic 5 using a relevance setting of $\lambda = 0.5$ has the most relevant term: oil, and some other related terms, like engine, oil filter, and fuel/gas. So this topic is related to detailed mechanical issues. 
+Topic 5 has the most relevant term: oil, and some other related terms, like engine, oil filter, and fuel/gas. So this topic is related to detailed mechanical issues. 
 https://dduwill.github.io/Product-Review/vis/#topic=5&lambda=0.5&term=
 
-Topic 6 using a relevance setting of $\lambda = 0.5$ has the most relevant term: battery, or charger/power. This topic is related to electrical system of the cars.
+Topic 6 has the most relevant term: battery, or charger/power. This topic is related to electrical system of the cars.
 https://dduwill.github.io/Product-Review/vis/#topic=6&lambda=0.5&term=
 
 Topic 4, 8 have a great overlap, mostly focused on exterior apperance of the vehicles, like leathers, wax, cleanness, plaints.
 
-Topic 4 using a relevance setting of $\lambda = 0.5$ has the most relevant term: wax and paint.
+Topic 4 has the most relevant term: wax and paint.
 https://dduwill.github.io/Product-Review/vis/#topic=4&lambda=0.5&term=
 
-Topic 8 using a relevance setting of $\lambda = 0.5$ has the most relevant term: leather.
+Topic 8 has the most relevant term: leather.
 https://dduwill.github.io/Product-Review/vis/#topic=8&lambda=0.5&term=
 
 Topic 7 is very close to topic 4, 8, but more focused on minor exterior condition, for example, whether the vehicle is carefully washed or not. Most relevant terms are: towels, wash, cleaning, brush, etc.
@@ -53,7 +56,7 @@ From the topics' sizes, we could conclude that three major factors affect the cu
 
 ### The data
 
-First, I manually download the review .json file to my work dir, and load the .json file in R studio. Note that this review files contains 9 categories, while the 5th column in the list is the review text, so I extract the the review text only.
+First, I manually download the review .json file to my work dir, and load the .json file in R studio. Because .json file is a large list instead of data frame, so after loading the original .json data, I also need to extract the review text to my review corpus. Note that this review files contains 9 categories, while the 5th column in the list is the review text.
 
 ```r
 #read json file
@@ -63,12 +66,9 @@ data <- fromJSON(sprintf("[%s]", paste(readLines(path),collapse=",")))
 review <-sapply(data, function(x) x[[5]])
 ```
 
-
-
-
 ### Pre-processing
 
-Before fitting a topic model, we need to tokenize the text, and remove all the punctuations and spaces. In particular, we use the english stop words from the "SMART" and several customized stop words.
+Before fitting a topic model, we need to tokenize the text, and remove all the punctuations and spaces. In particular, we use the english stop words from the "SMART" and several customized stop words, like just, get, will, can, etc. These customized stop words are based on dfm analysis, which is not showing here. Then I also formated my review data into the format required by the lda package.
 
 ```r
 #Cleaning corpus
@@ -114,7 +114,7 @@ documents <- lapply(doc.list, get.terms)
 
 ### Using the R package 'lda' for model fitting
 
-The object `documents` is a super large list where each element represents one document. After creating this list, we compute a few statistics about the corpus, such as length and vocabulary counts:
+Then I compute a few statistics about the corpus, such as length and vocabulary counts for lda:
 
 ```r
 # Compute some statistics related to the data set:
@@ -150,9 +150,7 @@ t2 - t1  #10 min runtime on my laptop
 
 ### Visualizing the fitted model with LDAvis
 
-To visualize the result using [LDAvis](https://github.com/cpsievert/LDAvis/), we'll need estimates of the document-topic distributions, which we denote by the $D \times K$ matrix $\theta$, and the set of topic-term distributions, which we denote by the $K \times W$ matrix $\phi$. We estimate the "smoothed" versions of these distributions ("smoothed" means that we've incorporated the effects of the priors into the estimates) by cross-tabulating the latent topic assignments from the last iteration of the collapsed Gibbs sampler with the documents and the terms, respectively, and then adding pseudocounts according to the priors. A better estimator might average over multiple iterations of the Gibbs sampler (after convergence, assuming that the MCMC is sampling within a local mode and there is no label switching occurring), but we won't worry about that for now.
-
-We've already computed the number of tokens per document and the frequency of the terms across the entire corpus. We save these, along with $\phi$, $\theta$, and `vocab`, in a list as the data object `reviews.LDA`.
+To visualize the result, I used the package `LDAvis`, which would estimate the document-topic distributions. I computed the number of tokens per document and the frequency of the terms across the entire corpus from previous steps. And I will use them to create the `reviews.LDA`, along with $\phi$, $\theta$, and `vocab`.
 ```r
 theta <- t(apply(fit$document_sums + alpha, 2, function(x) x/sum(x)))
 phi <- t(apply(t(fit$topics) + eta, 2, function(x) x/sum(x)))
@@ -164,12 +162,9 @@ reviews.LDA <- list(phi = phi,
                      term.frequency = term.frequency)
 ```
 
+Now we're ready to call the `createJSON()` function in `LDAvis` package. This function will return a character string representing a JSON object used to populate the visualization. The `createJSON()` function computes topic frequencies, inter-topic distances, and projects topics onto a two-dimensional plane to represent their similarity to each other. 
 
-
-
-
-Now we're ready to call the `createJSON()` function in **LDAvis**. This function will return a character string representing a JSON object used to populate the visualization. The `createJSON()` function computes topic frequencies, inter-topic distances, and projects topics onto a two-dimensional plane to represent their similarity to each other. It also loops through a grid of values of a tuning parameter, $0 \leq \lambda \leq 1$, that controls how the terms are ranked for each topic, where terms are listed in decreasing of *relevance*, where the relevance of term $w$ to topic $t$ is defined as $\lambda \times p(w \mid t) + (1 - \lambda) \times p(w \mid t)/p(w)$. Values of $\lambda$ near 1 give high relevance rankings to *frequent* terms within a given topic, whereas values of $\lambda$ near zero give high relevance rankings to *exclusive* terms within a topic. The set of all terms which are ranked among the top-`R` most relevant terms for each topic are pre-computed by the `createJSON()` function and sent to the browser to be interactively visualized using D3 as part of the JSON object.
-
+It has a feature of tuning parameter - lambda (0-1), that controls how the terms are ranked for each topic, where terms are listed in decreasing of relevance. Values of lambda near 1 give high relevance rankings to frequent terms within a given topic, whereas values of lambda near zero give high relevance rankings to exclusive terms (or not requent used) within a topic. Note that readers can interact with any of these topics to view the relevant terms.
 
 ```r
 library(LDAvis)
@@ -184,4 +179,4 @@ json <- createJSON(phi = reviews.LDA$phi,
 serVis(json, out.dir = 'vis', open.browser = TRUE)
 ```
 
-The `serVis()` function can take `json` and serve the result in a variety of ways. Here we'll write `json` to a file within the 'vis' directory (along with other HTML and JavaScript required to render the page). You can see the result at: https://dduwill.github.io/Product-Review/vis.
+The `serVis()` function can take `json` and create a user interactive webpage. As a result, I write `json` to the `vis` directory along with other HTML and JavaScript required to render the page. Note that the `vis` directory was orginally saved in my local drive, but I uploaded to Github for sharing purpose. You can see this LDA page at: https://dduwill.github.io/Product-Review/vis.
