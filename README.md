@@ -14,7 +14,40 @@ The LDA topic models analysis for top 10 relavant topics is Available at: https:
 
 ### Result Analysis
 
-According to my result, topic 3, 5, 6 have some overlaps, these customer reviews are more focused on detailed information of the vehicles, such as engines, oil filters, batteries, lights, etc. Topic 4, 8 have a great overlap, mostly focused on exterior apperance of the vehicles, like leathers, wax, cleanness, plaints. Topic 7 is very close to topic 4, 8, but more focused on minor exterior condition, for example, whether the vehicle is carefully washed or not. Topic 9, 2, 1 are interconnected with each other, these topics focused on overall usage experiences of the vehicles. Topic 10 is isolated from all the other topics, which only focused on windshield and wiper conditions. From the topics' sizes, we could conclude that three major factors affect the customer reviews - usage satifaction, exterior apperance and mechanical conditions. 
+According to my result, topic 3, 5, 6 have some overlaps, these customer reviews are more focused on detailed information of the vehicles, such as engines, oil filters, batteries, lights, etc.
+
+Topic 3 using a relevance setting of $\lambda = 0.5$ has the most relevant term: light bulbs, and also some other related terms, like leds, bright, information. 
+https://dduwill.github.io/Product-Review/vis/#topic=3&lambda=0.5&term=
+
+Topic 5 using a relevance setting of $\lambda = 0.5$ has the most relevant term: oil, and some other related terms, like engine, oil filter, and fuel/gas. So this topic is related to detailed mechanical issues. 
+https://dduwill.github.io/Product-Review/vis/#topic=5&lambda=0.5&term=
+
+Topic 6 using a relevance setting of $\lambda = 0.5$ has the most relevant term: battery, or charger/power. This topic is related to electrical system of the cars.
+https://dduwill.github.io/Product-Review/vis/#topic=6&lambda=0.5&term=
+
+Topic 4, 8 have a great overlap, mostly focused on exterior apperance of the vehicles, like leathers, wax, cleanness, plaints.
+
+Topic 4 using a relevance setting of $\lambda = 0.5$ has the most relevant term: wax and paint.
+https://dduwill.github.io/Product-Review/vis/#topic=4&lambda=0.5&term=
+
+Topic 8 using a relevance setting of $\lambda = 0.5$ has the most relevant term: leather.
+https://dduwill.github.io/Product-Review/vis/#topic=8&lambda=0.5&term=
+
+Topic 7 is very close to topic 4, 8, but more focused on minor exterior condition, for example, whether the vehicle is carefully washed or not. Most relevant terms are: towels, wash, cleaning, brush, etc.
+https://dduwill.github.io/Product-Review/vis/#topic=7&lambda=0.5&term=
+
+Topic 9, 2, 1 are interconnected with each other, these topics focused on detailed parts of the vehicles, like trailer, lock, hose, tire, etc. 
+
+https://dduwill.github.io/Product-Review/vis/#topic=1&lambda=0.5&term=
+
+https://dduwill.github.io/Product-Review/vis/#topic=2&lambda=0.5&term=
+
+https://dduwill.github.io/Product-Review/vis/#topic=9&lambda=0.5&term=
+
+Topic 10 is isolated from all the other topics, which only focused on windshield and wiper conditions. 
+https://dduwill.github.io/Product-Review/vis/#topic=10&lambda=0.5&term=
+
+From the topics' sizes, we could conclude that three major factors affect the customer reviews - exterior apperance, mechanical conditions and detailed parts. 
 
 
 
