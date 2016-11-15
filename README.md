@@ -4,59 +4,58 @@
 ###Yixi Wei
 ========================================================
 
-In this project, I run an LDA topic models analysis for Amazon's Customer Reviews, more specifically, the Cell Phone and Accessories reviews (available from: http://jmcauley.ucsd.edu/data/amazon/). I used the R package [lda](http://cran.r-project.org/web/packages/lda/) and I visualize the output using [LDAvis](https://github.com/cpsievert/LDAvis).
+In this project, I run an LDA topic models analysis for Amazon's Customer Reviews, more specifically, the Automotive reviews (available from: http://jmcauley.ucsd.edu/data/amazon/). I used the R package [lda](http://cran.r-project.org/web/packages/lda/) and I visualize the output using [LDAvis](https://github.com/cpsievert/LDAvis).
 
 ### The data
 
-First, I manually download the review .json file to my work dir, and load the .json file in R studio.
+First, I manually download the review .json file to my work dir, and load the .json file in R studio. Note that this review files contains 9 categories, while the 5th column in the list is the review text, so I extract the the review text only.
 
 ```r
+#read json file
 setwd("C:/Users/weiyi/Desktop/R/Assignment 8")
-precorpus <- fromJSON(file = "Cell_Phones_and_Accessories_5.json")
+path <- "Automotive_5.json"
+data <- fromJSON(sprintf("[%s]", paste(readLines(path),collapse=",")))
+review <-sapply(data, function(x) x[[5]])
 ```
 
-As a result, this file contains 9 categories, and reviewText has review contents, which I will use for analysis.
-```r
-List of 9
- $ reviewerID    : chr "A30TL5EWN6DFXT"
- $ asin          : chr "120401325X"
- $ reviewerName  : chr "christina"
- $ helpful       : num [1:2] 0 0
- $ reviewText    : chr "They look good and stick good! I just don't like the rounded shape because I was always bumping it and Siri kept popping up and"| __truncated__
- $ overall       : num 4
- $ summary       : chr "Looks Good"
- $ unixReviewTime: num 1.4e+09
- $ reviewTime    : chr "05 21, 2014"
-```
+
+
 
 ### Pre-processing
 
-Before fitting a topic model, we need to tokenize the text. This dataset is already fairly clean, so we only remove punctuation and some common [stop words](http://en.wikipedia.org/wiki/Stop_words). In particular, we use the english stop words from the [SMART information retrieval system](http://en.wikipedia.org/wiki/SMART_Information_Retrieval_System), available in the R package **tm**.
-
+Before fitting a topic model, we need to tokenize the text, and remove all the punctuations and spaces. In particular, we use the english stop words from the "SMART" and several customized stop words.
 
 ```r
-# read in some stopwords:
-library(tm)
-stop_words <- stopwords("SMART")
+#Cleaning corpus
+stop_words <- stopwords("english")
+## additional junk words showing up in the data
+stop_words <- c(stop_words, "just", "get", "will", "can", "also", "much","need")
+stop_words <- tolower(stop_words)
 
-# pre-processing:
-reviews <- gsub("'", "", reviews)  # remove apostrophes
-reviews <- gsub("[[:punct:]]", " ", reviews)  # replace punctuation with space
-reviews <- gsub("[[:cntrl:]]", " ", reviews)  # replace control characters with space
-reviews <- gsub("^[[:space:]]+", "", reviews) # remove whitespace at beginning of documents
-reviews <- gsub("[[:space:]]+$", "", reviews) # remove whitespace at end of documents
-reviews <- tolower(reviews)  # force to lowercase
+
+cleancorpus <- gsub("'", "", cleancorpus) # remove apostrophes
+cleancorpus <- gsub("[[:punct:]]", " ", cleancorpus)  # replace punctuation with space
+cleancorpus <- gsub("[[:cntrl:]]", " ", cleancorpus)  # replace control characters with space
+cleancorpus <- gsub("^[[:space:]]+", "", cleancorpus) # remove whitespace at beginning of documents
+cleancorpus <- gsub("[[:space:]]+$", "", cleancorpus) # remove whitespace at end of documents
+cleancorpus <- gsub("[^a-zA-Z -]", " ", cleancorpus) # allows only letters
+cleancorpus <- tolower(cleancorpus)  # force to lowercase
+
+## get rid of blank docs
+cleancorpus <- cleancorpus[cleancorpus != ""]
 
 # tokenize on space and output as a list:
-doc.list <- strsplit(reviews, "[[:space:]]+")
+doc.list <- strsplit(cleancorpus, "[[:space:]]+")
 
 # compute the table of terms:
 term.table <- table(unlist(doc.list))
 term.table <- sort(term.table, decreasing = TRUE)
 
+
 # remove terms that are stop words or occur fewer than 5 times:
 del <- names(term.table) %in% stop_words | term.table < 5
 term.table <- term.table[!del]
+term.table <- term.table[names(term.table) != ""]
 vocab <- names(term.table)
 
 # now put the documents into the format required by the lda package:
@@ -70,25 +69,24 @@ documents <- lapply(doc.list, get.terms)
 
 ### Using the R package 'lda' for model fitting
 
-The object `documents` is a length-2000 list where each element represents one document, according to the specifications of the **lda** package. After creating this list, we compute a few statistics about the corpus:
-
+The object `documents` is a super large list where each element represents one document. After creating this list, we compute a few statistics about the corpus, such as length and vocabulary counts:
 
 ```r
 # Compute some statistics related to the data set:
-D <- length(documents)  # number of documents (2,000)
-W <- length(vocab)  # number of terms in the vocab (14,568)
-doc.length <- sapply(documents, function(x) sum(x[2, ]))  # number of tokens per document [312, 288, 170, 436, 291, ...]
-N <- sum(doc.length)  # total number of tokens in the data (546,827)
-term.frequency <- as.integer(term.table)  # frequencies of terms in the corpus [8939, 5544, 2411, 2410, 2143, ...]
+D <- length(documents)  # number of documents (1)
+W <- length(vocab)  # number of terms in the vocab (8941L)
+doc.length <- sapply(documents, function(x) sum(x[2, ]))  # number of tokens per document [46, 27, 106 ...]
+N <- sum(doc.length)  # total number of tokens in the data (863558L)
+term.frequency <- as.integer(term.table) 
 ```
 
-Next, we set up a topic model with 20 topics, relatively diffuse priors for the topic-term distributions ($\eta$ = 0.02) and document-topic distributions ($\alpha$  = 0.02), and we set the collapsed Gibbs sampler to run for 5,000 iterations (slightly conservative to ensure convergence). A visual inspection of `fit$log.likelihood` shows that the MCMC algorithm has converged after 5,000 iterations. This block of code takes about 24 minutes to run on a laptop using a single core 1.7Ghz processor (and 8GB RAM).
+Next, we set up a topic model with 10 topics, relatively diffuse priors for the topic-term distributions ($\eta$ = 0.02) and document-topic distributions ($\alpha$  = 0.02), and we set the collapsed Gibbs sampler to run for 3,000 iterations (slightly conservative to ensure convergence). A visual inspection of `fit$log.likelihood` shows that the MCMC algorithm has converged after 3,000 iterations. This block of code takes about 10 minutes to run on a laptop using a 2.5GHz i7 processor (and 8GB RAM).
 
 
 ```r
 # MCMC and model tuning parameters:
-K <- 20
-G <- 5000
+K <- 10
+G <- 3000
 alpha <- 0.02
 eta <- 0.02
 
@@ -101,61 +99,44 @@ fit <- lda.collapsed.gibbs.sampler(documents = documents, K = K, vocab = vocab,
                                    eta = eta, initial = NULL, burnin = 0,
                                    compute.log.likelihood = TRUE)
 t2 <- Sys.time()
-t2 - t1  # about 24 minutes on laptop
+## display runtime
+t2 - t1  #10 min runtime on my laptop
 ```
 
 ### Visualizing the fitted model with LDAvis
 
 To visualize the result using [LDAvis](https://github.com/cpsievert/LDAvis/), we'll need estimates of the document-topic distributions, which we denote by the $D \times K$ matrix $\theta$, and the set of topic-term distributions, which we denote by the $K \times W$ matrix $\phi$. We estimate the "smoothed" versions of these distributions ("smoothed" means that we've incorporated the effects of the priors into the estimates) by cross-tabulating the latent topic assignments from the last iteration of the collapsed Gibbs sampler with the documents and the terms, respectively, and then adding pseudocounts according to the priors. A better estimator might average over multiple iterations of the Gibbs sampler (after convergence, assuming that the MCMC is sampling within a local mode and there is no label switching occurring), but we won't worry about that for now.
 
-
+We've already computed the number of tokens per document and the frequency of the terms across the entire corpus. We save these, along with $\phi$, $\theta$, and `vocab`, in a list as the data object `reviews.LDA`.
 ```r
 theta <- t(apply(fit$document_sums + alpha, 2, function(x) x/sum(x)))
 phi <- t(apply(t(fit$topics) + eta, 2, function(x) x/sum(x)))
-```
 
-We've already computed the number of tokens per document and the frequency of the terms across the entire corpus. We save these, along with $\phi$, $\theta$, and `vocab`, in a list as the data object `MovieReviews`, which is included in the **LDAvis** package.
-
-
-```r
-MovieReviews <- list(phi = phi,
+reviews.LDA <- list(phi = phi,
                      theta = theta,
                      doc.length = doc.length,
                      vocab = vocab,
                      term.frequency = term.frequency)
 ```
 
+
+
+
+
 Now we're ready to call the `createJSON()` function in **LDAvis**. This function will return a character string representing a JSON object used to populate the visualization. The `createJSON()` function computes topic frequencies, inter-topic distances, and projects topics onto a two-dimensional plane to represent their similarity to each other. It also loops through a grid of values of a tuning parameter, $0 \leq \lambda \leq 1$, that controls how the terms are ranked for each topic, where terms are listed in decreasing of *relevance*, where the relevance of term $w$ to topic $t$ is defined as $\lambda \times p(w \mid t) + (1 - \lambda) \times p(w \mid t)/p(w)$. Values of $\lambda$ near 1 give high relevance rankings to *frequent* terms within a given topic, whereas values of $\lambda$ near zero give high relevance rankings to *exclusive* terms within a topic. The set of all terms which are ranked among the top-`R` most relevant terms for each topic are pre-computed by the `createJSON()` function and sent to the browser to be interactively visualized using D3 as part of the JSON object.
-
-
 
 
 ```r
 library(LDAvis)
-
+library(servr)
 # create the JSON object to feed the visualization:
-json <- createJSON(phi = MovieReviews$phi, 
-                   theta = MovieReviews$theta, 
-                   doc.length = MovieReviews$doc.length, 
-                   vocab = MovieReviews$vocab, 
-                   term.frequency = MovieReviews$term.frequency)
+json <- createJSON(phi = reviews.LDA$phi, 
+                   theta = reviews.LDA$theta, 
+                   doc.length = reviews.LDA$doc.length, 
+                   vocab = reviews.LDA$vocab, 
+                   term.frequency = reviews.LDA$term.frequency)
+
+serVis(json, out.dir = 'vis', open.browser = TRUE)
 ```
 
-The `serVis()` function can take `json` and serve the result in a variety of ways. Here we'll write `json` to a file within the 'vis' directory (along with other HTML and JavaScript required to render the page). You can see the result [here](http://cpsievert.github.io/LDAvis/reviews/vis).
-
-
-```r
-serVis(json, out.dir = 'vis', open.browser = FALSE)
-```
-
-If you discover something interesting in your data using **LDAvis**, you can share the result via a URL since the state of the visualization is stored in the URL at all times. For example, in the movie review data, you can quickly see that Topic 7 is broadly about comedies by linking directly to the state of LDAvis where the selected Topic is "7" and the value of $\lambda$ is 0.6 with the following URL:
-
-[http://cpsievert.github.io/LDAvis/reviews/vis/#topic=7&lambda=0.6&term=](http://cpsievert.github.io/LDAvis/reviews/vis/#topic=7&lambda=0.6&term=)
-
-You can also link to the term that is hovered. For example, when you look at the 30 most relevant terms for Topic 5 using a relevance setting of $\lambda = 0.5$, the term "action" is the 6th bar from the top (i.e. the 6th most relevant term for this topic). The widths of the red and blue bars indicate that there is at least one other topic in which the term "action" appears frequently. By hovering over "action", we see from the following state of **LDAvis** that term "action" also appears frequently in Topic 14 (as the 9th most relevant term):
-
-http://cpsievert.github.io/LDAvis/reviews/vis/#topic=14&lambda=0.5&term=action
-
-Comparing these two topics, we can see that Topic 5 discusses action in the context of movies about crime and police, whereas in Topic 14, the term "action"" is also used frequently, but the topic is specifically about kung fu movies with Chinese actors (Jackie Chan and Jet Li, for example). These two topics both make heavy use of the word "action" but in slightly different contexts (i.e. slightly different styles of movies).
-
-To encode a state of the visualization in the URL, you must include a string after the "/" of the form "#topic=k&labmda=l&term=s", where "k", "l", and "s" are strings representing the topic to be selected, the value of $\lambda$ to be used in the relevance calculation, and the term to be hovered, respectively. If no term hovering is desired, omit "s" from the URL. The topic, "k", will be forced to an integer in $\{0, 1, .., K\}$, and the value of $\lambda$ will be forced to the interval $[0, 1]$, with non-numeric values returning the default state of the visualization (topic = 0, $\lambda$ = 1, term = "").
+The `serVis()` function can take `json` and serve the result in a variety of ways. Here we'll write `json` to a file within the 'vis' directory (along with other HTML and JavaScript required to render the page). You can see the result at: https://dduwill.github.io/Product-Review/vis.
