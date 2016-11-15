@@ -45,22 +45,58 @@
 <h3>
 <a id="summary" class="anchor" href="#summary" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Summary</h3>
 
-<p>In this project, I run an LDA topic models analysis for Amazon's Customer Reviews, more specifically, the Automotive reviews (available from: <a href="http://jmcauley.ucsd.edu/data/amazon/">http://jmcauley.ucsd.edu/data/amazon/</a>). I used the R package <a href="http://cran.r-project.org/web/packages/lda/">lda</a> and I visualize the output using <a href="https://github.com/cpsievert/LDAvis">LDAvis</a>.</p>
+<p>In this project, I run an LDA topic models analysis for Amazon's Customer Reviews, more specifically, the Automotive reviews (available from: <a href="http://jmcauley.ucsd.edu/data/amazon/">http://jmcauley.ucsd.edu/data/amazon/</a>). I used the R package <a href="http://cran.r-project.org/web/packages/lda/">lda</a> and I visualize the output using <a href="https://github.com/cpsievert/LDAvis">LDAvis</a>. Because my dataset is a json file, so I used the <a href="http://cran.r-project.org/web/packages/lda/">rjson</a> to process this dataset.</p>
+
+<p>All the relevant files are on Github repository: <a href="https://github.com/dduwill/Product-Review">https://github.com/dduwill/Product-Review</a></p>
 
 <p>The R Source Code is Available at: <a href="https://github.com/dduwill/Product-Review/blob/master/Assignment%208.R">https://github.com/dduwill/Product-Review/blob/master/Assignment%208.R</a></p>
 
-<p>The LDA topic models analysis for top 10 relavant topics is Available at: <a href="https://dduwill.github.io/Product-Review/vis">https://dduwill.github.io/Product-Review/vis</a>
-<img src="https://github.com/dduwill/Product-Review/blob/master/images/Capture.PNG?raw=true" alt=""></p>
+<p>The LDA topic models analysis for top 10 relavant topics is Available at: <a href="https://dduwill.github.io/Product-Review/vis">https://dduwill.github.io/Product-Review/vis</a></p>
 
 <h3>
 <a id="result-analysis" class="anchor" href="#result-analysis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Result Analysis</h3>
 
-<p>According to my result, topic 3, 5, 6 have some overlaps, these customer reviews are more focused on detailed information of the vehicles, such as engines, oil filters, batteries, lights, etc. Topic 4, 8 have a great overlap, mostly focused on exterior apperance of the vehicles, like leathers, wax, cleanness, plaints. Topic 7 is very close to topic 4, 8, but more focused on minor exterior condition, for example, whether the vehicle is carefully washed or not. Topic 9, 2, 1 are interconnected with each other, these topics focused on overall usage experiences of the vehicles. Topic 10 is isolated from all the other topics, which only focused on windshield and wiper conditions. From the topics' sizes, we could conclude that three major factors affect the customer reviews - usage satifaction, exterior apperance and mechanical conditions. </p>
+<p>Note that, all my analysis are using a relevance setting of $\lambda = 0.5$.</p>
+
+<p>According to my result, topic 3, 5, 6 have some overlaps, these customer reviews are more focused on detailed information of the vehicles, such as engines, oil filters, batteries, lights, etc.</p>
+
+<p>Topic 3  has the most relevant term: light bulbs, and also some other related terms, like leds, bright, information. 
+<a href="https://dduwill.github.io/Product-Review/vis/#topic=3&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=3&amp;lambda=0.5&amp;term=</a></p>
+
+<p>Topic 5 has the most relevant term: oil, and some other related terms, like engine, oil filter, and fuel/gas. So this topic is related to detailed mechanical issues. 
+<a href="https://dduwill.github.io/Product-Review/vis/#topic=5&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=5&amp;lambda=0.5&amp;term=</a></p>
+
+<p>Topic 6 has the most relevant term: battery, or charger/power. This topic is related to electrical system of the cars.
+<a href="https://dduwill.github.io/Product-Review/vis/#topic=6&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=6&amp;lambda=0.5&amp;term=</a></p>
+
+<p>Topic 4, 8 have a great overlap, mostly focused on exterior apperance of the vehicles, like leathers, wax, cleanness, plaints.</p>
+
+<p>Topic 4 has the most relevant term: wax and paint.
+<a href="https://dduwill.github.io/Product-Review/vis/#topic=4&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=4&amp;lambda=0.5&amp;term=</a></p>
+
+<p>Topic 8 has the most relevant term: leather.
+<a href="https://dduwill.github.io/Product-Review/vis/#topic=8&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=8&amp;lambda=0.5&amp;term=</a></p>
+
+<p>Topic 7 is very close to topic 4, 8, but more focused on minor exterior condition, for example, whether the vehicle is carefully washed or not. Most relevant terms are: towels, wash, cleaning, brush, etc.
+<a href="https://dduwill.github.io/Product-Review/vis/#topic=7&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=7&amp;lambda=0.5&amp;term=</a></p>
+
+<p>Topic 9, 2, 1 are interconnected with each other, these topics focused on detailed parts of the vehicles, like trailer, lock, hose, tire, etc. </p>
+
+<p><a href="https://dduwill.github.io/Product-Review/vis/#topic=1&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=1&amp;lambda=0.5&amp;term=</a></p>
+
+<p><a href="https://dduwill.github.io/Product-Review/vis/#topic=2&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=2&amp;lambda=0.5&amp;term=</a></p>
+
+<p><a href="https://dduwill.github.io/Product-Review/vis/#topic=9&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=9&amp;lambda=0.5&amp;term=</a></p>
+
+<p>Topic 10 is isolated from all the other topics, which only focused on windshield and wiper conditions. 
+<a href="https://dduwill.github.io/Product-Review/vis/#topic=10&amp;lambda=0.5&amp;term=">https://dduwill.github.io/Product-Review/vis/#topic=10&amp;lambda=0.5&amp;term=</a></p>
+
+<p>From the topics' sizes, we could conclude that three major factors affect the customer reviews - exterior apperance, mechanical conditions and detailed parts. </p>
 
 <h3>
 <a id="the-data" class="anchor" href="#the-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The data</h3>
 
-<p>First, I manually download the review .json file to my work dir, and load the .json file in R studio. Note that this review files contains 9 categories, while the 5th column in the list is the review text, so I extract the the review text only.</p>
+<p>First, I manually download the review .json file to my work dir, and load the .json file in R studio. Because .json file is a large list instead of data frame, so after loading the original .json data, I also need to extract the review text to my review corpus. Note that this review files contains 9 categories, while the 5th column in the list is the review text.</p>
 
 <div class="highlight highlight-source-r"><pre><span class="pl-c">#read json file</span>
 setwd(<span class="pl-s"><span class="pl-pds">"</span>C:/Users/weiyi/Desktop/R/Assignment 8<span class="pl-pds">"</span></span>)
@@ -71,7 +107,7 @@ setwd(<span class="pl-s"><span class="pl-pds">"</span>C:/Users/weiyi/Desktop/R/A
 <h3>
 <a id="pre-processing" class="anchor" href="#pre-processing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pre-processing</h3>
 
-<p>Before fitting a topic model, we need to tokenize the text, and remove all the punctuations and spaces. In particular, we use the english stop words from the "SMART" and several customized stop words.</p>
+<p>Before fitting a topic model, we need to tokenize the text, and remove all the punctuations and spaces. In particular, we use the english stop words from the "SMART" and several customized stop words, like just, get, will, can, etc. These customized stop words are based on dfm analysis, which is not showing here. Then I also formated my review data into the format required by the lda package.</p>
 
 <div class="highlight highlight-source-r"><pre><span class="pl-c">#Cleaning corpus</span>
 <span class="pl-smi">stop_words</span> <span class="pl-k">&lt;-</span> stopwords(<span class="pl-s"><span class="pl-pds">"</span>english<span class="pl-pds">"</span></span>)
@@ -116,7 +152,7 @@ setwd(<span class="pl-s"><span class="pl-pds">"</span>C:/Users/weiyi/Desktop/R/A
 <h3>
 <a id="using-the-r-package-lda-for-model-fitting" class="anchor" href="#using-the-r-package-lda-for-model-fitting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using the R package 'lda' for model fitting</h3>
 
-<p>The object <code>documents</code> is a super large list where each element represents one document. After creating this list, we compute a few statistics about the corpus, such as length and vocabulary counts:</p>
+<p>Then I compute a few statistics about the corpus, such as length and vocabulary counts for lda:</p>
 
 <div class="highlight highlight-source-r"><pre><span class="pl-c"># Compute some statistics related to the data set:</span>
 <span class="pl-smi">D</span> <span class="pl-k">&lt;-</span> length(<span class="pl-smi">documents</span>)  <span class="pl-c"># number of documents (1)</span>
@@ -148,9 +184,7 @@ set.seed(<span class="pl-c1">357</span>)
 <h3>
 <a id="visualizing-the-fitted-model-with-ldavis" class="anchor" href="#visualizing-the-fitted-model-with-ldavis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Visualizing the fitted model with LDAvis</h3>
 
-<p>To visualize the result using <a href="https://github.com/cpsievert/LDAvis/">LDAvis</a>, we'll need estimates of the document-topic distributions, which we denote by the $D \times K$ matrix $\theta$, and the set of topic-term distributions, which we denote by the $K \times W$ matrix $\phi$. We estimate the "smoothed" versions of these distributions ("smoothed" means that we've incorporated the effects of the priors into the estimates) by cross-tabulating the latent topic assignments from the last iteration of the collapsed Gibbs sampler with the documents and the terms, respectively, and then adding pseudocounts according to the priors. A better estimator might average over multiple iterations of the Gibbs sampler (after convergence, assuming that the MCMC is sampling within a local mode and there is no label switching occurring), but we won't worry about that for now.</p>
-
-<p>We've already computed the number of tokens per document and the frequency of the terms across the entire corpus. We save these, along with $\phi$, $\theta$, and <code>vocab</code>, in a list as the data object <code>reviews.LDA</code>.</p>
+<p>To visualize the result, I used the package <code>LDAvis</code>, which would estimate the document-topic distributions. I computed the number of tokens per document and the frequency of the terms across the entire corpus from previous steps. And I will use them to create the <code>reviews.LDA</code>, along with $\phi$, $\theta$, and <code>vocab</code>.</p>
 
 <div class="highlight highlight-source-r"><pre><span class="pl-smi">theta</span> <span class="pl-k">&lt;-</span> t(apply(<span class="pl-smi">fit</span><span class="pl-k">$</span><span class="pl-smi">document_sums</span> <span class="pl-k">+</span> <span class="pl-smi">alpha</span>, <span class="pl-c1">2</span>, <span class="pl-k">function</span>(<span class="pl-smi">x</span>) <span class="pl-smi">x</span><span class="pl-k">/</span>sum(<span class="pl-smi">x</span>)))
 <span class="pl-smi">phi</span> <span class="pl-k">&lt;-</span> t(apply(t(<span class="pl-smi">fit</span><span class="pl-k">$</span><span class="pl-smi">topics</span>) <span class="pl-k">+</span> <span class="pl-smi">eta</span>, <span class="pl-c1">2</span>, <span class="pl-k">function</span>(<span class="pl-smi">x</span>) <span class="pl-smi">x</span><span class="pl-k">/</span>sum(<span class="pl-smi">x</span>)))
@@ -161,7 +195,9 @@ set.seed(<span class="pl-c1">357</span>)
                      <span class="pl-v">vocab</span> <span class="pl-k">=</span> <span class="pl-smi">vocab</span>,
                      <span class="pl-v">term.frequency</span> <span class="pl-k">=</span> <span class="pl-smi">term.frequency</span>)</pre></div>
 
-<p>Now we're ready to call the <code>createJSON()</code> function in <strong>LDAvis</strong>. This function will return a character string representing a JSON object used to populate the visualization. The <code>createJSON()</code> function computes topic frequencies, inter-topic distances, and projects topics onto a two-dimensional plane to represent their similarity to each other. It also loops through a grid of values of a tuning parameter, $0 \leq \lambda \leq 1$, that controls how the terms are ranked for each topic, where terms are listed in decreasing of <em>relevance</em>, where the relevance of term $w$ to topic $t$ is defined as $\lambda \times p(w \mid t) + (1 - \lambda) \times p(w \mid t)/p(w)$. Values of $\lambda$ near 1 give high relevance rankings to <em>frequent</em> terms within a given topic, whereas values of $\lambda$ near zero give high relevance rankings to <em>exclusive</em> terms within a topic. The set of all terms which are ranked among the top-<code>R</code> most relevant terms for each topic are pre-computed by the <code>createJSON()</code> function and sent to the browser to be interactively visualized using D3 as part of the JSON object.</p>
+<p>Now we're ready to call the <code>createJSON()</code> function in <code>LDAvis</code> package. This function will return a character string representing a JSON object used to populate the visualization. The <code>createJSON()</code> function computes topic frequencies, inter-topic distances, and projects topics onto a two-dimensional plane to represent their similarity to each other. </p>
+
+<p>It has a feature of tuning parameter - lambda (0-1), that controls how the terms are ranked for each topic, where terms are listed in decreasing of relevance. Values of lambda near 1 give high relevance rankings to frequent terms within a given topic, whereas values of lambda near zero give high relevance rankings to exclusive terms (or not requent used) within a topic. Note that readers can interact with any of these topics to view the relevant terms.</p>
 
 <div class="highlight highlight-source-r"><pre>library(<span class="pl-smi">LDAvis</span>)
 library(<span class="pl-smi">servr</span>)
@@ -174,7 +210,7 @@ library(<span class="pl-smi">servr</span>)
 
 serVis(<span class="pl-smi">json</span>, <span class="pl-v">out.dir</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>vis<span class="pl-pds">'</span></span>, <span class="pl-v">open.browser</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>)</pre></div>
 
-<p>The <code>serVis()</code> function can take <code>json</code> and serve the result in a variety of ways. Here we'll write <code>json</code> to a file within the 'vis' directory (along with other HTML and JavaScript required to render the page). You can see the result at: <a href="https://dduwill.github.io/Product-Review/vis">https://dduwill.github.io/Product-Review/vis</a>.</p>
+<p>The <code>serVis()</code> function can take <code>json</code> and create a user interactive webpage. As a result, I write <code>json</code> to the <code>vis</code> directory along with other HTML and JavaScript required to render the page. Note that the <code>vis</code> directory was orginally saved in my local drive, but I uploaded to Github for sharing purpose. You can see this LDA page at: <a href="https://dduwill.github.io/Product-Review/vis">https://dduwill.github.io/Product-Review/vis</a>.</p>
       </section>
     </div>
 
