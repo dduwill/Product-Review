@@ -1,0 +1,6 @@
+{
+  "name": "Product-review",
+  "tagline": "BA Assignment 8",
+  "body": "# Yixi Wei\r\n# Business Analytics - Assignment 8\r\n# Amazon Customer Reviews\r\n\r\n## Getting started\r\n* This project used LDAvis package for visualization\r\n\r\n```s\r\ninstall.packages(\"LDAvis\")\r\n```\r\n```s\r\ndevtools::install_github(\"cpsievert/LDAvis\")\r\n```\r\n## Usage\r\n[http://dduwill.github.io/dduwill/Product-Review/vis/#topic=3&lambda=0.6&term=cop]\r\n## Contributing\r\n\r\n## History\r\n\r\n## Credits\r\n\r\n## License\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
