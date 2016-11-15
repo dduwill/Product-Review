@@ -1,5 +1,4 @@
 
-# ${1:Project Name}
 # Business Analytics - Assignment 8
 # Amazon Customer Reviews
 
