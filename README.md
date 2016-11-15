@@ -1,2 +1,3 @@
 # Product-Review
-BA Assignment 8
+Business Analytics - Assignment 8
+Amazon Customer Reviews
